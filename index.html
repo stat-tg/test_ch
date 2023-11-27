@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Highcharts Plot on GitHub Pages</title>
+  <!-- Include Highcharts library -->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script src="http://code.highcharts.com/modules/export-data.js"></script>
+	<script src="http://highcharts.github.io/export-csv/export-csv.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+</head>
+<body>
+
+  <!-- Your Highcharts container -->
+ <div id="2023_05_Kinobesuche_2004_2022" style="max-width: 800px; height: 500px"></div>
+
+
+  <script>
+    $(document).ready(function() {
+        	var chart = {
+            	zoomType: 'xy',
+                spacingBottom: 25
+            };
+            var plotOptions = {
+            	line: {
+            		marker: {
+            			enabled: false
+        			}
+            	}
+    		};
+            var title = {
+                text: 'Wieder mehr Kino-Besuche, aber noch nicht auf Vor-Corona-Niveau',
+                style: {
+                    fontSize: '18px'
+                },
+                align: 'left'
+            };
+            var subtitle = {
+                text: 'Kinobesuche und Filmvorführungen, Kanton Thurgau, 2004-2022',
+                style: {
+                    fontSize: '12px'
+                },
+                align: 'left'
+            };
+            
+            var yAxis = [{
+                labels: {
+                    style: {
+                        fontSize: '11px'
+                    }
+                },
+                title: {
+                	text: 'Kinobesuche',
+                    style: {
+                    	color: 'black'
+                    }
+                },
+                lineWidth: 1,
+                max: 160000,
+                tickInterval: 20000,
+                min: 0,
+
+            },{
+                labels: {
+                    style: {
+                        fontSize: '11px'
+                    }
+                },
+                gridLineWidth: 0,
+                title: {
+                	text: 'Filmvorführungen',
+                    style: {
+                    	color: '#black'
+                    }
+                },
+                opposite: true,
+                lineWidth: 1,
+                min: 0,
+                max: 12000
+            }];
+            var xAxis = {
+    			categories: [2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],
+                tickInterval: 2,
+                labels: {
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+			};
+            
+            var series = [{
+            	name: 'Kinobesuche',
+            	data: [164162,134215,154400,126491,122536,132949,122353,114355,126605,122447,105267,141939,111995,123083,112331,126104,66400,66436,104664],
+                color: '#27408B',
+                type: 'line',
+             	lineWidth: 3
+            },{
+            	name: 'Filmvorführungen',
+                type: 'column',
+            	data: [5387,5443,5233,5222,5032,5057,4933,5077,5618,5544,5372,5396,5403,5589,5534,5704,1646,3910,5368],
+                yAxis: 1,
+                color: '#0064e6',
+                marker: {
+                	symbol: 'circle'
+                }
+      
+            }];
+			
+            var tooltip = {
+                formatter: function() {
+                      	return this.x + '<br><span style="color:' + this.series.color + '">\u25CF</span> ' + this.series.name + ': ' + addThousandsep(this.y);
+                  }
+             };
+
+            var legend = {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+				padding: 25,
+    			symbolPadding: 10,
+    			symbolWidth: 25,
+                margin: -10,
+				itemStyle: {
+                	fontWeight: 'normal'
+            	}
+            };
+            
+            var credits = {
+    			text: 'Dienststelle für Statistik Kanton Thurgau <br>Datenquelle: Kulturamt Kanton Thurgau',
+    			href: false,
+                style: {
+                	color:'#999999',
+                    cursor: false,
+                    fontSize:'10px'
+                },
+    			position: {
+      				align: 'left',
+      				x: 10,
+      				y: -30
+    			}
+  			};
+            var exporting = {
+            	allowHTML: true,
+            	enabled: true,
+                filename:'2023_05_Kinobesuche_2004_2022',
+            	buttons: {
+                	contextButton: {
+                    	menuItems: "printChart separator downloadPNG downloadJPEG downloadSVG".split(" ")
+                    }
+            	},
+                /*csv: {
+                    columnHeaderFormatter: function (item) {
+                    	if(item instanceof Highcharts.Axis) {
+                        	return 'Quartal';
+                        } else {
+                        	if(item instanceof Highcharts.Series) {
+                        		return item.name;
+                            }
+                        }
+                    }
+                }*/
+            };
+            
+            
+            var highchartsOptions = Highcharts.setOptions ({
+        		lang: {
+        			decimalPoint: '.',
+           		 	thousandsSep: "'",
+           		 	months: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+            		weekdays: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+            		shortMonths: ['Jan', 'Feb', 'Mrz', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+            		contextButtonTitle: 'Drucken, Download, Export',
+            		downloadJPEG: 'Download JPEG Bild',
+            		downloadPNG: 'Download PNG Bild',
+            		downloadSVG: 'Download SVG Vektor Bild',
+            		downloadXLS: 'Download XLS',
+            		printChart: 'Bild drucken',
+            		viewData: 'Datentabelle ein-/ausblenden',
+            		resetZoom: "Zoom zurücksetzen",
+            		resetZoomTitle: "Zoom zurücksetzen",
+            		drillUpText: "Zurück",
+                    numericSymbols: null //otherwise by default ['k', 'M', 'G', 'T', 'P', 'E']
+        		}        
+			});
+
+            var json = {};
+            json.chart = chart;
+            json.plotOptions = plotOptions;
+            json.title = title;
+            json.subtitle = subtitle;
+            json.tooltip = tooltip;
+            json.yAxis = yAxis;
+            json.xAxis = xAxis;
+            json.series = series;
+            json.legend = legend;
+            json.credits = credits;
+            json.exporting = exporting;
+            json.tooltip = tooltip;
+            json.highchartsOptions = highchartsOptions;
+
+            $('#2023_05_Kinobesuche_2004_2022').highcharts(json);
+        });
+
+
+  function addThousandsep(nStr) {
+                               nStr += '';
+                               x = nStr.split('.');
+                               x1 = x[0];
+                               x2 = x.length > 1 ? '.' + x[1] : '';
+                               var rgx = /(\d+)(\d{3})/;
+                               while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + "'" + '$2');
+                               }
+                               return x1 + x2;
+                               }
+
+</script>
+
+</body>
+</html>
